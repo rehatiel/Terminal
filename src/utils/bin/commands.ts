@@ -79,7 +79,47 @@ export const whoami = async (args: string[]): Promise<string> => {
 };
 
 export const ls = async (args: string[]): Promise<string> => {
-  return `
+  var param = args.join();
+  if (!param) {
+    return `
+documents	medical 	private 	taxes
+malware		photos		projects	flag.txt`;
+  }
+  else if (param == '-l'){
+    return `
+drwxr-----  8 bob bob 4096 Jan   3 20:31 documents
+drwxr-----  8 bob bob 4096 Jan  13 07:11 malware
+drwxr-----  8 bob bob 4096 Feb  38 09:22 medical
+drwxr-----  8 bob bob 4096 Feb   1 01:44 photos
+drwxr-----  8 bob bob 4096 May  30 12:14 private
+drwxr-----  8 bob bob 4096 Jun  22 16:22 projects
+drwxr-----  8 bob bob 4096 Jan  12 21:46 private
+drwxr-----  8 bob bob 4096 Apr  12 12:52 taxes
+-rw-r--r--  1 bob bob  546 Jan  28 20:22 flag.txt`;
+  }
+  else if (param == '-la' || param == '-al' ){
+    return `
+drwxr-xr-x 19 root root  4096 Sep  15 19:38 .
+drwxr-xr-x 19 root root  4096 Sep  15 19:38 ..
+drwxr-----  8 bob bob 4096 Jan   3 20:31 documents
+drwxr-----  8 bob bob 4096 Sep  15 20:31 .garbage
+drwxr-----  8 bob bob 4096 Jan  13 07:11 malware
+drwxr-----  8 bob bob 4096 Feb  38 09:22 medical
+drwxr-----  8 bob bob 4096 Feb   1 01:44 photos
+drwxr-----  8 bob bob 4096 May  30 12:14 private
+drwxr-----  8 bob bob 4096 Jun  22 16:22 projects
+drwxr-----  8 bob bob 4096 Jan  12 21:46 private
+drwxr-----  8 bob bob 4096 Apr  12 12:52 taxes
+-rw-r--r--  1 bob bob  546 Jan  28 20:22 flag.txt`;
+  }
+  else if (param == '-a'){
+    return `
+.			.garbage	photos		taxes
+..			malware		private		flag.txt
+documents	medical		projects`;
+  }
+  else
+    return `
 documents	medical 	private 	taxes
 malware		photos		projects	flag.txt`;
 };
@@ -91,6 +131,29 @@ export const cat = async (args: string[]): Promise<string> => {
   }
   else if (file == 'flag.txt'){
     return 'Flag{You got the flag}';
+  }
+    else if (file == '.garbage'){
+    return `
+///////(#@@@@@@@@@@@@%%%#####(((/(((((/////(((((((((#((##%%@@@@@@@@@@#//////////
+((/////(&@@@@@@@@@&&&&%%#######((/////////////((((((#((####%@@@@@@@@@(//////////
+(//////(#@@@@@@@@@&%#%@@&&&%%&&&&&%#((/////(#%%%&%&%%%&&####@@%@@@@@@///////////
+////////(@@@@@&@@@%%#&&%########%%%%##(((((###(((((####%%#(#&&@@@@@@%///////////
+////////%@@@@(@@@&%##%%%%%%%&@%&%##%%%#//(##%%%%%&%%%%##(#(##&&@@@@@&/*/////////
+///////(@@@@@%%&@&%####%&&&%(%#/(((((##(((##((/##/(%%%#(((###%&@@@@@#/*/**//////
+///////#@@@@@@(&@@&%#((##((#((((/((####(((((((((((((((((((##%#&@@@@@(****///////
+////////(@@@@@@@@@&%%##(((/(/(//(((####(//(((((///////(((###%#&@@@@@@*****//////
+//////////@@@@@@@@&%%%###(((((((#%####(////((##((///((((####%%%@@@@@@**/*///////
+///////////%%@@@%@&%%%%###(((((##%&@@&#((((%&%####(((((####%%%%@@@@@@****///////
+/////////////&@@@@@%%%%%%#######%%%&%@@@@&%%###############%%&@&@@@@&/**////////
+///////////(//@@@@@&&%%%&#%##%%#&&&%%%#/(#%#%%&%%%%#######%%&@@@@@&&@/*****/////
+/////////(///%@@@@@@&&%%%%###&@&@@&&&%((#((%&&&&&&@%######%&@@@@@@(%&**/*///////
+//////////(%@@@@@@@@@@&%%%%##&%#%@&&&@@&@@&&%%#%##&######%%@@@@@@@@(/**/////////
+/////#&%#@@@@@@@@@@@@@@&%&&%%%(((/%((((///((/(#%#(&%(###%%@@@@@@@&@@#///////////
+//////#@@@@@@@@@@@@@@@@@@&@&%#(####///((////(/(##(#&%%%&&@@@@@@@@@@@@@@(////////
+///////(@@@@@@@@@@@@@@@@@@@@#(#(##%%#(((///((#%%#((%&@@@@@@@@@@@@@@@@@@@#(//////
+///////(@@@@@@@@@@@@@@@@@@@@@#(#######%%%##%%%##((#&@@@@@@@@@@@@@@%&@@@%&(//////
+/////////#&@@@@@@@@@@@@@@@@@@@&%((#####&#%###(#((#%@@@@@@@@@@@@@@@(%/@@@////////
+I had to move fast. The hacker copied my garbage file.`;
   }
   else
     return `
