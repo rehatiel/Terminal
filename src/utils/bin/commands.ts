@@ -10,19 +10,14 @@ export const help = async (args: string[]): Promise<string> => {
 };
 
 // Redirection
-export const repo = async (args: string[]): Promise<string> => {
-  window.open(`${config.repo}`);
-  return 'Opening Github repository...';
-};
+//export const repo = async (args: string[]): Promise<string> => {
+//  window.open(`${config.repo}`);
+//  return 'Opening Github repository...';
+//};
 
 // About
 export const about = async (args: string[]): Promise<string> => {
-  return `Hi, I am ${config.name}. 
-Welcome to my website!
-More about me:
-'sumfetch' - short summary.
-'resume' - my latest resume.
-'readme' - my github readme.`;
+  return `Hi, I am ${config.name}.`;
 };
 
 export const resume = async (args: string[]): Promise<string> => {
@@ -31,10 +26,10 @@ export const resume = async (args: string[]): Promise<string> => {
 };
 
 // Contact
-export const email = async (args: string[]): Promise<string> => {
-  window.open(`mailto:${config.email}`);
-  return `Opening mailto:${config.email}...`;
-};
+//export const email = async (args: string[]): Promise<string> => {
+//  window.open(`mailto:${config.email}`);
+//  return `Opening mailto:${config.email}...`;
+//};
 
 export const github = async (args: string[]): Promise<string> => {
   window.open(`https://github.com/${config.social.github}/`);
@@ -157,7 +152,7 @@ I had to move fast. The hacker copied my garbage file.`;
   }
   else
     return `
-cat: ` + file + ": No such file or directory";
+cat: ${file} : No such file or directory`;
 };
 
 export const more = async (args: string[]): Promise<string> => {
@@ -170,7 +165,7 @@ export const more = async (args: string[]): Promise<string> => {
   }
   else
     return `
-more: stat of ` + file + " failed: No such file or directory";
+more: stat of ${file} failed: No such file or directory`;
 };
 
 
@@ -199,8 +194,7 @@ export const emacs = async (args?: string[]): Promise<string> => {
 };
 
 export const sudo = async (args?: string[]): Promise<string> => {
-  window.open('https://www.youtube.com/watch?v=dQw4w9WgXcQ', '_blank'); // ...I'm sorry
-  return `Permission denied: with little power comes... no responsibility? `;
+  return `${config.ps1_username} is not in the sudoers file.  This incident will be reported.`;
 };
 
 // Banner
