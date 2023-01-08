@@ -5,20 +5,7 @@ import config from '../../../config.json';
 
 // Help
 export const help = async (args: string[]): Promise<string> => {
-  const commands = Object.keys(bin).sort().join(', ');
-  var c = '';
-  for (let i = 1; i <= Object.keys(bin).sort().length; i++) {
-    if (i % 7 === 0) {
-      c += Object.keys(bin).sort()[i - 1] + '\n';
-    } else {
-      c += Object.keys(bin).sort()[i - 1] + ' ';
-    }
-  }
-  return `Welcome! Here are all the available commands:
-\n${c}\n
-[tab]: trigger completion.
-[ctrl+l]/clear: clear terminal.\n
-Type 'sumfetch' to display summary.
+  return `There is no right or wrong, just fun and boring.
 `;
 };
 
@@ -41,15 +28,6 @@ More about me:
 export const resume = async (args: string[]): Promise<string> => {
   window.open(`${config.resume_url}`);
   return 'Opening resume...';
-};
-
-// Donate
-export const donate = async (args: string[]): Promise<string> => {
-  return `thank you for your interest. 
-here are the ways you can support my work:
-- <u><a class="text-light-blue dark:text-dark-blue underline" href="${config.donate_urls.paypal}" target="_blank">paypal</a></u>
-- <u><a class="text-light-blue dark:text-dark-blue underline" href="${config.donate_urls.patreon}" target="_blank">patreon</a></u>
-`;
 };
 
 // Contact
@@ -101,16 +79,40 @@ export const whoami = async (args: string[]): Promise<string> => {
 };
 
 export const ls = async (args: string[]): Promise<string> => {
-  return `a
-bunch
-of
-fake
-directories`;
+  return `
+documents	medical 	private 	taxes
+malware		photos		projects	flag.txt`;
 };
 
+export const cat = async (args: string[]): Promise<string> => {
+  var file = args.join();
+  if (!file) {
+    return 'Meow';
+  }
+  else if (file == 'flag.txt'){
+    return 'Flag{You got the flag}';
+  }
+  else
+    return `
+cat: ` + file + ": No such file or directory";
+};
+
+export const more = async (args: string[]): Promise<string> => {
+  var file = args.join();
+  if (!file) {
+    return 'Please sir, can I have some';
+  }
+  else if (file == 'flag.txt'){
+    return 'Flag{You got the flag}';
+  }
+  else
+    return `
+more: stat of ` + file + " failed: No such file or directory";
+};
+
+
 export const cd = async (args: string[]): Promise<string> => {
-  return `unfortunately, i cannot afford more directories.
-if you want to help, you can type 'donate'.`;
+  return `cd: permission denied: ${args[0]}`; 
 };
 
 export const date = async (args: string[]): Promise<string> => {
@@ -141,17 +143,16 @@ export const sudo = async (args?: string[]): Promise<string> => {
 // Banner
 export const banner = (args?: string[]): string => {
   return `
-█████        ███                       ███████████                                   
-░░███        ░░░                       ░█░░░███░░░█                                   
- ░███        ████  █████ █████  ██████ ░   ░███  ░   ██████  ████████  █████████████  
- ░███       ░░███ ░░███ ░░███  ███░░███    ░███     ███░░███░░███░░███░░███░░███░░███ 
- ░███        ░███  ░███  ░███ ░███████     ░███    ░███████  ░███ ░░░  ░███ ░███ ░███ 
- ░███      █ ░███  ░░███ ███  ░███░░░      ░███    ░███░░░   ░███      ░███ ░███ ░███ 
- ███████████ █████  ░░█████   ░░██████     █████   ░░██████  █████     █████░███ █████
-░░░░░░░░░░░ ░░░░░    ░░░░░     ░░░░░░     ░░░░░     ░░░░░░  ░░░░░     ░░░░░ ░░░ ░░░░░ 
+ .d8888b.  8888888 888888b.    .d8888b.   .d88888b.  888b    888      888     888 88888888888     d888   .d8888b.   .d8888b.   .d8888b.  
+d88P  Y88b   888   888  "88b  d88P  Y88b d88P" "Y88b 8888b   888      888     888     888        d8888  d88P  Y88b d88P  Y88b d88P  Y88b 
+888    888   888   888  .88P  Y88b.      888     888 88888b  888      888     888     888          888  888    888 888    888 888    888 
+888          888   8888888K.   "Y888b.   888     888 888Y88b 888      Y88b   d88P     888          888  888    888 888    888 888    888 
+888  88888   888   888  "Y88b     "Y88b. 888     888 888 Y88b888       Y88b d88P      888          888  888    888 888    888 888    888 
+888    888   888   888    888       "888 888     888 888  Y88888        Y88o88P       888   888888 888  888    888 888    888 888    888 
+Y88b  d88P   888   888   d88P Y88b  d88P Y88b. .d88P 888   Y8888         Y888P        888          888  Y88b  d88P Y88b  d88P Y88b  d88P 
+ "Y8888P88 8888888 8888888P"   "Y8888P"   "Y88888P"  888    Y888          Y8P         888        8888888 "Y8888P"   "Y8888P"   "Y8888P"  
+                                                                                                                                         
+                                                        AUTHORIZED PERSONNEL ONLY
 
-Type 'help' to see the list of available commands.
-Type 'sumfetch' to display summary.
-Type 'repo' or click <u><a class="text-light-blue dark:text-dark-blue underline" href="${config.repo}" target="_blank">here</a></u> for the Github repository.
 `;
 };
