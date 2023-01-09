@@ -273,3 +273,31 @@ export const cp = async (args: string[]): Promise<string> => {
   return `cp: cannot create regular file '${args[0]}': Permission denied`; 
 };
 
+export const free = async (args: string[]): Promise<string> => {
+  return `
+              total        used        free      shared  buff/cache   available
+Mem:        2865988     1756908      402980       62148      706100      877848
+Swap:       2935804      345344     2590460`; 
+};
+
+export const df = async (args: string[]): Promise<string> => {
+  return `
+Filesystem     1K-blocks     Used Available Use% Mounted on
+udev             1418104        0   1418104   0% /dev
+tmpfs             286600    30192    256408  11% /run
+/dev/vda1       56977256 11935260  42131744  23% /
+tmpfs            1432992        0   1432992   0% /dev/shm
+tmpfs               5120        0      5120   0% /run/lock
+tmpfs             286596        0    286596   0% /run/user/0`; 
+};
+
+export const uname = async (args: string[]): Promise<string> => {
+  var param = args.join();
+  if (param == '-a'){
+    return `
+Linux g-server001.gibson.local 4.19.0-23-amd64 #1 SMP Debian 4.19.269-1 (2022-12-20) x86_64 GNU/Linux`;
+  }
+  else
+    return `
+Linux`;
+};
