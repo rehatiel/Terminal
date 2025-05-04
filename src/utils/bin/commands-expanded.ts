@@ -3,6 +3,8 @@
 import * as bin from './index';
 import config from '../../../config.json';
 
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
 export const cat = async (args: string[]): Promise<string> => {
   var file = args.join();
   if (!file) {
@@ -10,6 +12,49 @@ export const cat = async (args: string[]): Promise<string> => {
   }
   else if (file == 'flag.txt'){
     return 'Flag{You got the flag}';
+  }
+    else if (file == '/etc/passwd'){
+    return `root:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+bin:x:2:2:bin:/bin:/usr/sbin/nologin
+sys:x:3:3:sys:/dev:/usr/sbin/nologin
+sync:x:4:65534:sync:/bin:/bin/sync
+games:x:5:60:games:/usr/games:/usr/sbin/nologin
+man:x:6:12:man:/var/cache/man:/usr/sbin/nologin
+lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin
+mail:x:8:8:mail:/var/mail:/usr/sbin/nologin
+news:x:9:9:news:/var/spool/news:/usr/sbin/nologin
+nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin
+zerocool:x:1001:1001:Dade Murphy:/home/zerocool:/bin/bash
+acidburn:x:1002:1002:Kate Libby:/home/acidburn:/bin/zsh
+crashoverride:x:1003:1003:Alias of Dade Murphy:/home/crashoverride:/bin/bash
+cereal:x:1004:1004:Emmanuel Goldstein:/home/cereal:/bin/fish
+lordnikon:x:1005:1005:Paul Cook:/home/lordnikon:/bin/bash
+phantomphreak:x:1006:1006:Ramon Sanchez:/home/phantomphreak:/bin/zsh
+theplague:x:1007:1007:Eugene Belford:/home/theplague:/bin/bash
+joey:x:1008:1008:Joey Pardella:/home/joey:/bin/bash
+`;
+  }
+  else if (file == '/etc/shadow'){
+    return `root:$6$rootPW$3lmZ.rH8S2cLIOY7uYx/MbkzP7jMg...:19402:0:99999:7:::
+daemon:*:19402:0:99999:7:::
+bin:*:19402:0:99999:7:::
+sys:*:19402:0:99999:7:::
+sync:*:19402:0:99999:7:::
+games:*:19402:0:99999:7:::
+man:*:19402:0:99999:7:::
+lp:*:19402:0:99999:7:::
+mail:*:19402:0:99999:7:::
+news:*:19402:0:99999:7:::
+nobody:*:19402:0:99999:7:::
+zerocool:$6$0ut4g3$C6/XkUgGPWeF.Y6N2XmsI2UK/GEy...:19402:0:99999:7:::
+acidburn:$6$g1rlp0w3r$U4LjypU7cHLW9xFbGV2KVReA...:19402:0:99999:7:::
+crashoverride:$6$du4l1ty$X8fV1AeN2L6kzNLtPBe8KTx...:19402:0:99999:7:::
+cereal:$6$spr1nkles$MzfsHKnYjkZm0Z2kOgXuWeG3...:19402:0:99999:7:::
+lordnikon:$6$cl41rv0y4nt$0qYjFvAwOaWx0tPuFsL8zd...:19402:0:99999:7:::
+phantomphreak:$6$p4ckets$S5J5oVfHMcWzEz2kVnNjZDf...:19402:0:99999:7:::
+theplague:$6$Ellingson$As82DZnKvUmrKXNWpYe7CJ...:19402:0:99999:7:::
+joey:$6$n00b$MzU0YjNhdmJjYXJnd2NmZGVm...:19402:0:99999:7:::`;
   }
     else if (file == '.garbage'){
     return `
@@ -172,9 +217,22 @@ I had to move fast. The hacker copied my garbage file.`;
 more: stat of ${file} failed: No such file or directory`;
 };
 
+function printWithDelay(text, delay) {
+  let i = 0;
+  const intervalId = setInterval(() => {
+    if (i < text.length) {
+      console.log(text[i]);
+      i++;
+    } else {
+      clearInterval(intervalId);
+    }
+  }, delay);
+}
+
 export const kill = async (args: string[]): Promise<string> => {
   var param = args.join();
   if (param == '2347'){
+    document.getElementById("myDiv").style.backgroundColor = "red";
     return `
 Kernel bug detected[#1]:
 Cpu 0
@@ -217,7 +275,6 @@ Call Trace:[<8402d074>] 0x8402d074
 
 Code: 3c030fff  3463ff00  00431024 <00028036> 09029cfd  24050001  27bdffc8  0085102b  afb7002c 
 Kernel panic - not syncing: Fatal exception in interrupt`;
-window.close('https://cyanidesyndrome.com');
   }
   else
     return `
@@ -249,6 +306,9 @@ export const ps = async (args: string[]): Promise<string> => {
   return `
     PID TTY          TIME CMD
    2347 pts/0    00:00:00 bash
+   1337 pts/0    00:00:01 hacker
+   2049 pts/0    00:00:00 worm.sh
+   3133 pts/0    00:00:02 gibson-monitor
    4659 pts/0    00:00:00 ps`; 
 };
 
@@ -266,7 +326,92 @@ export const cd = async (args: string[]): Promise<string> => {
 };
 
 export const rm = async (args: string[]): Promise<string> => {
-  return `rm: cannot remove '${args[0]}': Permission denied`; 
+  if (args.length === 0) {
+    return `rm: missing operand
+Try 'rm --help' for more information.`;
+  }
+
+  const protectedPaths = [
+    '/proc/kcore',
+    '/sys/kernel/debug',
+    '/dev/tty',
+    '/run/udev',
+    '/var/run/dbus',
+    '/home/zerocool/.bashrc',
+    '/etc/shadow',
+    '/sbin/init',
+    '/usr/bin/python3',
+    '/lib/modules',
+    '/boot/vmlinuz',
+    '/etc/hosts',
+    '/var/log/syslog',
+    '/usr/lib/systemd/systemd',
+    '/dev/sda',
+    '/mnt/usb',
+    '/opt/firmware',
+    '/media/cdrom',
+    '/root/.ssh/authorized_keys',
+    '/tmp/.X11-unix'
+  ];
+
+  const errorMessages = {
+    'Operation not permitted': [
+      '/proc/kcore',
+      '/sys/kernel/debug',
+      '/lib/modules',
+      '/opt/firmware'
+    ],
+    'Device or resource busy': [
+      '/dev/tty',
+      '/run/udev',
+      '/var/run/dbus',
+      '/mnt/usb',
+      '/media/cdrom',
+      '/tmp/.X11-unix'
+    ],
+    'Permission denied': [
+      '/home/zerocool/.bashrc',
+      '/etc/shadow',
+      '/etc/hosts',
+      '/var/log/syslog',
+      '/root/.ssh/authorized_keys'
+    ],
+    'Text file busy': [
+      '/sbin/init',
+      '/usr/bin/python3',
+      '/boot/vmlinuz',
+      '/usr/lib/systemd/systemd'
+    ]
+  };
+
+  let output = '';
+
+  for (const path of args) {
+    let errorFound = false;
+    for (const [error, paths] of Object.entries(errorMessages)) {
+      if (paths.includes(path)) {
+        output += `rm: cannot remove '${path}': ${error}\n`;
+        errorFound = true;
+        break;
+      }
+    }
+    if (!errorFound) {
+      output += `rm: cannot remove '${path}': No such file or directory\n`;
+    }
+  }
+
+  return output.trim();
+};
+
+export const nc = async (args: string[]): Promise<string> => {
+  const joinedArgs = args.join(' ');
+  if (joinedArgs === '-lvp 1337') {
+    return `
+listening on [any] 1337 ...
+connect to [127.0.0.1] from gibson.corp [172.16.204.55] 31337`;
+  } else {
+    return `nc: invalid or unsupported arguments: ${joinedArgs}`;
+  }
 };
 
 export const cp = async (args: string[]): Promise<string> => {
@@ -301,3 +446,142 @@ Linux g-server001.gibson.local 4.19.0-23-amd64 #1 SMP Debian 4.19.269-1 (2022-12
     return `
 Linux`;
 };
+
+export const hacktheplanet = async () => {
+  return `
+MESS WITH THE BEST, DIE LIKE THE REST.
+🔥🌎💻 Hack the Planet! 💻🌎🔥
+`;
+};
+
+export const nmap = async (args: string[]): Promise<string> => {
+  if (!args.length) {
+    return `nmap: failed to resolve given hostname/IP: Name or service not known
+Usage: nmap [Scan Type(s)] [Options] <host or net>
+Try 'man nmap' for more information.`;
+  }
+
+  const target = args[0];
+
+  // Simulated output for gibson.corp
+  if (target === 'gibson.corp') {
+    return `
+Starting Nmap 7.93 ( https://nmap.org ) at 2025-05-03 22:00
+Nmap scan report for gibson.corp (172.16.204.55)
+Host is up (0.023s latency).
+Not shown: 997 closed ports
+PORT     STATE SERVICE
+22/tcp   open  ssh
+80/tcp   open  http
+31337/tcp open  elite
+`;
+  }
+
+  // For anything else:
+  return `
+Starting Nmap 7.93 ( https://nmap.org ) at 2025-05-03 22:00
+Nmap scan report for ${target}
+Host is up (0.044s latency).
+Not shown: 999 closed ports
+PORT     STATE SERVICE
+22/tcp   open  ssh
+`;
+};
+
+export const crontab = async (args: string[]): Promise<string> => {
+  if (args[0] === '-l') {
+    return `
+*/5 * * * * /usr/bin/nmap -sS gibson.corp >> /var/log/scan.log
+@reboot /bin/bash /home/zerocool/worm.sh
+0 3 * * * /usr/local/bin/send_logs.sh
+13 4 * * 0 /usr/bin/python3 /home/bob/scripts/data_leech.py --target=gibson.corp
+@monthly curl -X POST http://172.16.204.99:9000/payload
+`;
+  }
+
+  return `crontab: usage error: unknown option '${args[0]}'\nTry 'crontab -l' to list your current crontab entries.`;
+};
+
+export const fortune = async (): Promise<string> => {
+  const quotes = [
+    "Hack the planet!",
+    "Even root has a boss.",
+    "rm -rf / — because you like living dangerously.",
+    "Permission denied. Again.",
+    "Access granted... just kidding.",
+    "The Plague is watching you.",
+    "Zero Cool was here.",
+    "Rebooting is just a fancy logout.",
+    "There is no cloud. Just someone else's computer.",
+    "Your kernel has panicked. You should too."
+  ];
+
+  const pick = quotes[Math.floor(Math.random() * quotes.length)];
+  return pick;
+};
+
+export const cowsay = async (args: string[]): Promise<string> => {
+  const message = args.join(' ') || 'Moo.';
+
+  const topBorder = '_'.repeat(message.length + 2);
+  const bottomBorder = '-'.repeat(message.length + 2);
+
+  return `
+ ${topBorder}
+< ${message} >
+ ${bottomBorder}
+        \\   ^__^
+         \\  (oo)\\_______
+            (__)\\       )\\/\\
+                ||----w |
+                ||     ||`;
+};
+
+const fakeDNS: { [host: string]: string } = {
+  'gibson.corp': '172.16.204.55',
+  'icewall.gibson': '172.16.0.1',
+  'localhost': '127.0.0.1',
+  'google.com': '142.250.72.14',
+  'facebook.com': '157.240.20.35',
+  'twitter.com': '104.244.42.1',
+  'nsa.gov': '198.51.100.7',            // Reserved test IP
+  'hackernews.com': '192.0.2.66',       // Reserved test IP
+  'reddit.com': '151.101.65.140',
+  'example.com': '93.184.216.34',
+  'hacktheplanet.tv': '10.42.42.42',
+  'skynet.global': '203.0.113.99',      // Reserved test IP
+  'zero.cool': '133.7.13.37',
+  'ellingson.min': '172.31.13.37',
+};
+
+export const ping = async (args: string[]): Promise<string> => {
+  if (!args.length) {
+    return `ping: usage error: Destination address required\nUsage: ping <destination>`;
+  }
+
+  const host = args[0];
+  const ip = fakeDNS[host];
+
+  if (!ip) {
+    return `ping: unknown host ${host}`;
+  }
+
+  // Simulated dynamic latency (50-80 ms range)
+  const latency = () => (50 + Math.floor(Math.random() * 30));
+
+  return `PING ${host} (${ip}) 56(84) bytes of data.
+64 bytes from ${ip}: icmp_seq=1 ttl=64 time=${latency()}.1 ms
+64 bytes from ${ip}: icmp_seq=2 ttl=64 time=${latency()}.7 ms
+64 bytes from ${ip}: icmp_seq=3 ttl=64 time=${latency()}.3 ms
+64 bytes from ${ip}: icmp_seq=4 ttl=64 time=${latency()}.9 ms
+
+--- ${host} ping statistics ---
+4 packets transmitted, 4 received, 0% packet loss, time 3004ms
+rtt min/avg/max = ${latency()}.1/${latency()}.5/${latency()}.9 ms`;
+};
+
+export const sudo = async (args?: string[]): Promise<string> => {
+  return `${config.ps1_username} is not in the sudoers file.  This incident will be reported.`;
+};
+
+// End of File
